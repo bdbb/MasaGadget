@@ -7,17 +7,22 @@ import fi.dy.masa.malilib.event.InputEventHandler;
 import fi.dy.masa.malilib.hotkeys.IMouseInputHandler;
 import fi.dy.masa.tweakeroo.config.FeatureToggle;
 import fi.dy.masa.tweakeroo.config.Hotkeys;
-import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
-import org.jetbrains.annotations.ApiStatus;
 import top.hendrixshen.magiclib.MagicLib;
+
+//#if MC >= 12110
+//$$ import net.minecraft.client.input.MouseButtonEvent;
+//#endif
 
 //#if MC > 11902
 //$$ import net.minecraft.core.registries.BuiltInRegistries;
 //#else
 import net.minecraft.core.Registry;
 //#endif
+
+import lombok.Getter;
+import org.jetbrains.annotations.ApiStatus;
 
 public class MouseScrollInputHandler implements IMouseInputHandler {
     @Getter
@@ -28,8 +33,13 @@ public class MouseScrollInputHandler implements IMouseInputHandler {
         InputEventHandler.getInputManager().registerMouseInputHandler(instance);
     }
 
+    //#if MC >= 12110
+    //$$ @Override
+    //$$ public boolean onMouseScroll(double mouseX, double mouseY, double amount) {
+    //#else
     @Override
     public boolean onMouseScroll(int mouseX, int mouseY, double amount) {
+    //#endif
         Player player = Minecraft.getInstance().player;
 
         if (!MagicLib.getInstance().getCurrentPlatform().isModLoaded(ModId.tweakeroo) ||
@@ -57,8 +67,14 @@ public class MouseScrollInputHandler implements IMouseInputHandler {
         //#endif
     }
 
+    //#if MC >= 12110
+    //$$ @Override
+    //$$ public boolean onMouseClick(MouseButtonEvent click, boolean eventButtonState) {
+    //$$     int eventButton = click.input();
+    //#else
     @Override
     public boolean onMouseClick(int mouseX, int mouseY, int eventButton, boolean eventButtonState) {
+    //#endif
         if (MagicLib.getInstance().getCurrentPlatform().isModLoaded(ModId.tweakeroo) &&
                 Configs.inventoryPreviewSupportSelect.getBooleanValue() &&
                 FeatureToggle.TWEAK_INVENTORY_PREVIEW.getBooleanValue() &&

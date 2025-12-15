@@ -325,7 +325,7 @@ public class InventoryOverlayRenderHandler {
         //$$         x,
         //$$         y
         //$$ );
-        //#if MC >= 12106
+        //#if MC >= 12106 && MC < 12110
         //$$ renderContext.getGuiComponent().renderDeferredTooltip();
         //#endif
         //#else

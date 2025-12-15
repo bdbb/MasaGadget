@@ -1,19 +1,18 @@
 package com.plusls.MasaGadget.impl.feature.entityTrace;
 
+//#if MC < 12110
 import com.google.common.collect.Queues;
 import com.plusls.MasaGadget.game.Configs;
 import com.plusls.MasaGadget.util.MiscUtil;
 import com.plusls.MasaGadget.util.RenderUtil;
 import com.plusls.MasaGadget.util.SyncUtil;
 import fi.dy.masa.malilib.util.Color4f;
-import lombok.Getter;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.ApiStatus;
 import top.hendrixshen.magiclib.MagicLib;
 import top.hendrixshen.magiclib.api.event.minecraft.render.RenderEntityListener;
 import top.hendrixshen.magiclib.api.event.minecraft.render.RenderLevelListener;
@@ -23,18 +22,35 @@ import top.hendrixshen.magiclib.impl.render.context.EntityRenderContext;
 import top.hendrixshen.magiclib.impl.render.context.RenderGlobal;
 
 import java.util.Queue;
+//#endif
 
+import lombok.Getter;
+import org.jetbrains.annotations.ApiStatus;
+
+//#if MC < 12110
 public class EntityTraceRenderer implements RenderEntityListener, RenderLevelListener {
+//#else
+//$$ import lombok.Getter;
+//$$ import org.jetbrains.annotations.ApiStatus;
+//$$
+//$$ // TODO: Re-implement when MagicLib's RenderEntityListener API is stable for 1.21.10
+//$$ public class EntityTraceRenderer {
+//#endif
     @Getter
     private static final EntityTraceRenderer instance = new EntityTraceRenderer();
+    //#if MC < 12110
     private final Queue<Entity> queue = Queues.newConcurrentLinkedQueue();
+    //#endif
 
     @ApiStatus.Internal
     public void init() {
+        //#if MC < 12110
         MagicLib.getInstance().getEventManager().register(RenderEntityListener.class, this);
         MagicLib.getInstance().getEventManager().register(RenderLevelListener.class, this);
+        //#endif
     }
 
+    //#if MC < 12110
     @Override
     public void preRenderEntity(Entity entity, EntityRenderContext renderContext) {
         // NO-OP
@@ -92,4 +108,5 @@ public class EntityTraceRenderer implements RenderEntityListener, RenderLevelLis
 
         this.queue.clear();
     }
+    //#endif
 }

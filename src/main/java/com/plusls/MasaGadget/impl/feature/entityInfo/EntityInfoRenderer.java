@@ -1,5 +1,6 @@
 package com.plusls.MasaGadget.impl.feature.entityInfo;
 
+//#if MC < 12110
 import com.google.common.collect.Queues;
 import com.plusls.MasaGadget.game.Configs;
 import com.plusls.MasaGadget.util.MiscUtil;
@@ -26,18 +27,32 @@ import top.hendrixshen.magiclib.impl.render.context.EntityRenderContext;
 import top.hendrixshen.magiclib.util.minecraft.render.RenderUtil;
 
 import java.util.Queue;
+//#endif
 
+//#if MC < 12110
 public class EntityInfoRenderer implements RenderEntityListener, RenderLevelListener {
+//#else
+//$$ import lombok.Getter;
+//$$ import org.jetbrains.annotations.ApiStatus;
+//$$
+//$$ // TODO: Re-implement when MagicLib's RenderEntityListener API is stable for 1.21.10
+//$$ public class EntityInfoRenderer {
+//#endif
     @Getter
     private static final EntityInfoRenderer instance = new EntityInfoRenderer();
+    //#if MC < 12110
     private final Queue<Entity> queue = Queues.newConcurrentLinkedQueue();
+    //#endif
 
     @ApiStatus.Internal
     public void init() {
+        //#if MC < 12110
         MagicLib.getInstance().getEventManager().register(RenderEntityListener.class, this);
         MagicLib.getInstance().getEventManager().register(RenderLevelListener.class, this);
+        //#endif
     }
 
+    //#if MC < 12110
     private static TextRenderer rotationAround(@NotNull TextRenderer renderer, @NotNull Position centerPos, double range) {
         Position camPos = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
         float xAngle = (float) Mth.atan2(camPos.z() - centerPos.z(), camPos.x() - centerPos.x());
@@ -109,4 +124,5 @@ public class EntityInfoRenderer implements RenderEntityListener, RenderLevelList
 
         this.queue.clear();
     }
+    //#endif
 }

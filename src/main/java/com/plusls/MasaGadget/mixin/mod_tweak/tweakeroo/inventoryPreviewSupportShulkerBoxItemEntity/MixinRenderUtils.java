@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import top.hendrixshen.magiclib.api.dependency.annotation.Dependencies;
 import top.hendrixshen.magiclib.api.dependency.annotation.Dependency;
 
-//#if MC >= 12106
+//#if MC >= 12106 && MC < 12110
 //$$ import com.mojang.logging.LogUtils;
 //$$ import net.minecraft.world.level.storage.TagValueInput;
 //$$ import net.minecraft.world.level.storage.ValueInput;
@@ -30,7 +30,7 @@ import top.hendrixshen.magiclib.api.dependency.annotation.Dependency;
 //$$ import org.spongepowered.asm.mixin.Unique;
 //#endif
 
-//#if MC > 12004
+//#if MC > 12004 && MC < 12110
 //$$ import net.minecraft.client.Minecraft;
 //$$ import net.minecraft.core.component.DataComponents;
 //$$ import net.minecraft.world.item.component.CustomData;
@@ -39,7 +39,7 @@ import top.hendrixshen.magiclib.api.dependency.annotation.Dependency;
 @Dependencies(require = @Dependency(ModId.tweakeroo))
 @Mixin(value = RenderUtils.class, remap = false)
 public abstract class MixinRenderUtils {
-    //#if MC >= 12106
+    //#if MC >= 12106 && MC < 12110
     //$$ @Unique
     //$$ private static final Logger masa_gadget$logger = LogUtils.getLogger();
     //#endif
@@ -57,6 +57,10 @@ public abstract class MixinRenderUtils {
         Container ret = inv;
         Entity traceEntity = HitResultHandler.getInstance().getHitEntity().orElse(null);
 
+        //#if MC >= 12110
+        //$$ // TODO: TypedEntityData API changed in 1.21.10 - disabled until API is understood
+        //$$ // This feature (inventoryPreviewSupportShulkerBoxItemEntity) is disabled for 1.21.10
+        //#else
         if (Configs.inventoryPreviewSupportShulkerBoxItemEntity.getBooleanValue() &&
                 ret == null &&
                 traceEntity instanceof ItemEntity) {
@@ -101,6 +105,7 @@ public abstract class MixinRenderUtils {
                 }
             }
         }
+        //#endif
 
         return ret;
     }
