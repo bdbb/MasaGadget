@@ -382,8 +382,18 @@ public class Configs {
         Configs.pinyinSouSuoFU2V.setValueChangeCallback(pinYinCallback);
     }
 
+    private static boolean isRedrawingConfigGui = false;
+
     private static void redrawConfigGui(Object object) {
-        ConfigGui.getCurrentInstance().ifPresent(ConfigGui::reDraw);
+        if (isRedrawingConfigGui) {
+            return;
+        }
+        isRedrawingConfigGui = true;
+        try {
+            ConfigGui.getCurrentInstance().ifPresent(ConfigGui::reDraw);
+        } finally {
+            isRedrawingConfigGui = false;
+        }
     }
 
     public static class ConfigCategory {
